@@ -1,0 +1,60 @@
+<div id="layoutAuthentication">
+  <div id="layoutAuthentication_content">
+    <main>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+              <div class="card-header">
+                <h3 class="text-center font-weight-light my-4">Login</h3>
+              </div>
+              <div class="card-body">
+                <form [formGroup]="loginForm" (ngSubmit)="loginFormSubmit()">
+                  <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label>
+                    <input formControlName="username" class="form-control py-4" id="inputEmailAddress" type="email"
+                      placeholder="Enter email address" />
+                    <span class="text-danger"
+                      [hidden]="!(loginForm.get('username').touched && loginForm.get('username').errors?.required)">
+                      Field cannot be empty
+                    </span>
+                  </div>
+                  <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label>
+                    <input formControlName="password" class="form-control py-4" id="inputPassword" type="password"
+                      placeholder="Enter password" />
+                    <span class="text-danger"
+                      [hidden]="!(loginForm.get('password').touched && loginForm.get('password').errors?.required)">
+                      Field cannot be empty
+                    </span>
+                  </div>
+
+
+                  <!-- <div class="form-group">
+                    <div class="custom-control custom-checkbox"><input class="custom-control-input"
+                        id="rememberPasswordCheck" type="checkbox" /><label class="custom-control-label"
+                        for="rememberPasswordCheck">Remember password</label></div>
+                  </div> -->
+
+
+                  <div class="form-group text-center text-danger">
+                    {{ this.errorMessage }}
+                  </div>
+
+                  <div class="form-group text-center">
+                    <button id="loginSubmitBtn" class="btn btn-primary" type="submit">
+                      Login
+                    </button>
+                  </div>
+
+                </form>
+              </div>
+              <div class="card-footer text-center">
+                <div class="small"><a [routerLink]="['/register']" routerLinkActive="router-link-active">Need an
+                    account? Sign up!</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

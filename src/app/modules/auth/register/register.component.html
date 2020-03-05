@@ -1,0 +1,146 @@
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="card shadow-lg border-0 rounded-lg mt-5">
+                            <div class="card-header">
+                                <h3 class="text-center font-weight-light my-4">Create Account</h3>
+                            </div>
+                            <div class="card-body">
+                                <form [formGroup]="registrationForm" (ngSubmit)="registrationFormSubmit()">
+                                    <div class=" form-row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputFirstName">First Name</label>
+                                                <input formControlName="fname" class="form-control py-4"
+                                                    id="inputFirstName" type="text" placeholder="Enter first name" />
+                                                <span class="text-danger"
+                                                    [hidden]="!(registrationForm.get('fname').touched && registrationForm.get('fname').errors?.required)">
+                                                    Field cannot be empty
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputMiddleName">Middle Name</label>
+                                                <input formControlName="mname" class="form-control py-4"
+                                                    id="inputMiddleName" type="text" placeholder="Enter middle name" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputLastName">Last Name</label>
+                                                <input formControlName="lname" class="form-control py-4"
+                                                    id="inputLastName" type="text" placeholder="Enter last name" />
+                                                <span class="text-danger"
+                                                    [hidden]="!(registrationForm.get('lname').touched && registrationForm.get('lname').errors?.required)">
+                                                    Field cannot be empty
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label name class="small mb-1" for="inputUserName">Username</label>
+                                        <input formControlName="username" class="form-control py-4" id="inputUserName"
+                                            type="text" placeholder="Choose username" />
+                                        <span class="text-danger"
+                                            [hidden]="!(registrationForm.get('username').touched && registrationForm.get('username').errors?.required)">
+                                            Field cannot be empty
+                                        </span>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label name class="small mb-1" for="inputEmailAddress">Email</label>
+                                                <input formControlName="email" class="form-control py-4"
+                                                    id="inputEmailAddress" type="email" aria-describedby="emailHelp"
+                                                    placeholder="Enter email address" />
+                                                <span class="text-danger">
+                                                    <span
+                                                        [hidden]="!(registrationForm.get('email').touched && registrationForm.get('email').errors?.required)">
+                                                        Field cannot be empty&nbsp;
+                                                    </span>
+                                                    <span
+                                                        [hidden]="!(registrationForm.get('email').touched && registrationForm.get('email').errors?.email)">
+                                                        Invalid Email
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label name class="small mb-1" for="inputMobile">Mobile</label>
+                                                <input formControlName="mobile" class="form-control py-4"
+                                                    id="inputMobile" type="text" aria-describedby="emailHelp"
+                                                    placeholder="Enter email address" />
+                                                <span class="text-danger">
+                                                    <span
+                                                        [hidden]="!(registrationForm.get('mobile').touched && registrationForm.get('mobile').errors?.required)">
+                                                        Field cannot be empty&nbsp;
+                                                    </span>
+                                                    <span
+                                                        [hidden]="!(registrationForm.get('mobile').touched && registrationForm.get('mobile').errors?.pattern)">
+                                                        Invalid Mobile Number
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputPassword">Password</label>
+                                                <input formControlName="password" class="form-control py-4"
+                                                    id="inputPassword" type="password" placeholder="Enter password" />
+                                                <span class="text-danger"
+                                                    [hidden]="!(registrationForm.get('password').touched && registrationForm.get('password').errors?.required)">
+                                                    Field cannot be empty
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="small mb-1" for="inputConfirmPassword">Confirm
+                                                    Password</label>
+                                                <input formControlName="cpassword" class="form-control py-4"
+                                                    id="inputConfirmPassword" type="password"
+                                                    placeholder="Confirm password" />
+                                                <span class="text-danger">
+                                                    <span
+                                                        [hidden]="!(registrationForm.get('cpassword').touched && registrationForm.get('cpassword').errors?.PasswordMatch)">
+                                                        Passwords don't match
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="inputAddress">Address</label>
+                                        <input formControlName="address" class="form-control py-4" id="inputAddress"
+                                            type="type" placeholder="Enter you address" />
+                                        <span class="text-danger"
+                                            [hidden]="!(registrationForm.get('address').touched && registrationForm.get('address').errors?.required)">
+                                            Field cannot be empty
+                                        </span>
+                                    </div>
+
+                                    <div class="form-group mt-4 mb-0">
+                                        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center">
+                                <div class="small"><a [routerLink]="['/']" routerLinkActive="router-link-active">Have an
+                                        account? Go to login</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
