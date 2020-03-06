@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('entered login');
+    //console.log('entered login');
 
     this.redirect();
 
@@ -49,10 +49,10 @@ export class LoginComponent implements OnInit {
           response => {
             if (response.status == 'success') {
               localStorage.setItem('token', response.token);
-              console.log(localStorage.getItem('token'));
+              //console.log(localStorage.getItem('token'));
               this.router.navigateByUrl('/task');
             } else {
-              console.log(response);
+              //console.log(response);
               if (response.status == 'failed') {
                 this.errorMessage = response.info;
               }
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
             document.getElementById('loginSubmitBtn').innerHTML = 'Login';
           },
           error => {
-            console.log(error.error);
+            //console.log(error.error);
             if (error.error.status == 'failed') {
               this.errorMessage = error.error.info;
             }

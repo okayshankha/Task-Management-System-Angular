@@ -10,6 +10,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class TaskComponent implements OnInit {
 
+  loggedInAs:any = null;
   countries: any = null;
   errorMessage: any = null;
   addNewTaskForm: FormGroup;
@@ -23,7 +24,14 @@ export class TaskComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private api: ApiService
-  ) { }
+  ) { 
+    this.loggedInAs = {
+      fname : "",
+      mname: "",
+      lname: ""
+    }
+    this.fetchMeApi();
+  }
 
   ngOnInit(): void {
     this.redirection();
@@ -31,9 +39,9 @@ export class TaskComponent implements OnInit {
       name: ['', [Validators.required]],
       project_id: ['', Validators.required],
       description: ['', Validators.required],
-      assigned_to_login_access_id: [''],
+      //assigned_to_login_access_id: [''],
       estimated_hours: ['0', [Validators.required, Validators.pattern('^[0-9]+\d*$')]],
-      assignment_comment: [''],
+      //assignment_comment: [''],
       parent_task_details_id: [''],
     });
 
@@ -49,6 +57,36 @@ export class TaskComponent implements OnInit {
 
   }
 
+  fetchMeApi(){
+    let data = null;
+    data = this.api.request('me', {});
+    if (data['function_response'] == 'success') {
+      data = data['server_response'];
+      if (data != null) {
+        data.subscribe(
+          response => {
+            //console.log(response);
+            if (response.status == 'success') {
+              this.loggedInAs = response.me;
+              //console.log(this.loggedInAs);
+            } else {
+              //console.log(response);
+              if (response.status == 'failed') {
+                //this.errorMessage = response.info;
+              }
+            }
+          },
+          error => {
+            //console.log(error.error);
+            if (error.error.status == 'failed') {
+              this.errorMessage = error.error.info;
+            }
+          }
+        );
+      }
+    }
+  }
+
   redirection() {
     if (!localStorage.getItem('token')) {
       this.router.navigateByUrl('');
@@ -56,7 +94,7 @@ export class TaskComponent implements OnInit {
   }
 
   refreshList(){
-    console.log('yo refreshList');
+    //console.log('yo refreshList');
     this.getAssignableParentTaskList();
     this.getAssignableProjectList();
     this.getAssignableManagerEmployeeList();
@@ -104,8 +142,9 @@ export class TaskComponent implements OnInit {
       }
     }
 
-    console.log('assigned_to_login_access_id  ' + this.addNewTaskForm.get('assigned_to_login_access_id').value);
+    //console.log('assigned_to_login_access_id  ' + this.addNewTaskForm.get('assigned_to_login_access_id').value);
 
+    /*
     if (this.addNewTaskForm.get('assigned_to_login_access_id').value != '') {
       this.addNewTaskForm.get('assignment_comment').setValidators(Validators.required);
       this.addNewTaskForm.get('assignment_comment').updateValueAndValidity();
@@ -113,6 +152,8 @@ export class TaskComponent implements OnInit {
       this.addNewTaskForm.get('assignment_comment').clearValidators();
       this.addNewTaskForm.get('assignment_comment').updateValueAndValidity();
     }
+
+    */
   }
 
   addNewTaskSubmitCancel() {
@@ -133,19 +174,19 @@ export class TaskComponent implements OnInit {
       if (data != null) {
         data.subscribe(
           response => {
-            console.log(response);
+            //console.log(response);
             if (response.status == 'success') {
               this.errorMessage = null;
               document.getElementById('addNewTaskFormCancelBtn').click();
             } else {
-              console.log(response);
+              //console.log(response);
               if (response.status == 'failed') {
                 this.errorMessage = response.info;
               }
             }
           },
           error => {
-            console.log(error.error);
+            //console.log(error.error);
             if (error.error.status == 'failed') {
               this.errorMessage = error.error.info;
             }
@@ -182,14 +223,14 @@ export class TaskComponent implements OnInit {
               if (response.status == 'success') {
                 document.getElementById('taskAssignFormCancelBtn').click();
               } else {
-                console.log(response);
+                //console.log(response);
                 if (response.status == 'failed') {
                   this.errorMessage = response.info;
                 }
               }
             },
             error => {
-              console.log(error.error);
+              //console.log(error.error);
               if (error.error.status == 'failed') {
                 this.errorMessage = error.error.info;
               }
@@ -213,7 +254,7 @@ export class TaskComponent implements OnInit {
     this.assignTaskForm.get('project_id').setValue(project_id);
     this.assignTaskForm.get('project_id').updateValueAndValidity();
 
-    console.log('getting ProjectSpecificEmployees');
+    //console.log('getting ProjectSpecificEmployees');
 
     let data = null;
     data = this.api.request('allEmployeeWithFilter', { filterByField: 'project_id', filterValue: project_id });
@@ -225,22 +266,22 @@ export class TaskComponent implements OnInit {
       if (data != null) {
         data.subscribe(
           response => {
-            console.log(response);
+            //console.log(response);
             if (response.status == 'success') {
-              console.log('getAssignableParentTaskList ===>==>');
-              console.log(response);
+              //console.log('getAssignableParentTaskList ===>==>');
+              //console.log(response);
               this.assignableProjectList = response.employees;
               this.assignTaskForm_emoloyeeList = this.assignableProjectList;
 
             } else {
-              console.log(response);
+              //console.log(response);
               if (response.status == 'failed') {
                 this.errorMessage = response.info;
               }
             }
           },
           error => {
-            console.log(error.error);
+            //console.log(error.error);
             if (error.error.status == 'failed') {
               this.errorMessage = error.error.info;
             }
@@ -258,21 +299,21 @@ export class TaskComponent implements OnInit {
       if (data != null) {
         data.subscribe(
           response => {
-            console.log(response);
+            //console.log(response);
             if (response.status == 'success') {
-              console.log('getAssignableParentTaskList');
+              //console.log('getAssignableParentTaskList');
 
               this.assignableProjectList = response.projects;
 
             } else {
-              console.log(response);
+              //console.log(response);
               if (response.status == 'failed') {
                 this.errorMessage = response.info;
               }
             }
           },
           error => {
-            console.log(error.error);
+            //console.log(error.error);
             if (error.error.status == 'failed') {
               this.errorMessage = error.error.info;
             }
@@ -291,21 +332,21 @@ export class TaskComponent implements OnInit {
       if (data != null) {
         data.subscribe(
           response => {
-            console.log(response);
+            //console.log(response);
             if (response.status == 'success') {
-              console.log('getAssignableParentTaskList');
+              //console.log('getAssignableParentTaskList');
 
               this.assignableParentTaskList = response.tasks;
 
             } else {
-              console.log(response);
+              //console.log(response);
               if (response.status == 'failed') {
                 this.errorMessage = response.info;
               }
             }
           },
           error => {
-            console.log(error.error);
+            //console.log(error.error);
             if (error.error.status == 'failed') {
               this.errorMessage = error.error.info;
             }
@@ -316,7 +357,7 @@ export class TaskComponent implements OnInit {
   }
 
   getAssignableManagerEmployeeList() {
-    console.log('getAssignableManagerEmployeeList');
+    //console.log('getAssignableManagerEmployeeList');
 
     let data = null;
     data = this.api.request('allEmployee', {});

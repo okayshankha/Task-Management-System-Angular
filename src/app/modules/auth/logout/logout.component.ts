@@ -19,26 +19,26 @@ export class LogoutComponent implements OnInit {
   }
 
   callOnLoad() {
-    console.log('lohout init');
+    //console.log('lohout init');
     let data = null;
 
     if (this.redirect()) {
       return;
     }
     data = this.api.request('logout', {});
-    console.log(data);
+    //console.log(data);
     if (data['function_response'] == 'success') {
       data = data['server_response'];
-      console.log('waiting for response');
+      //console.log('waiting for response');
       if (data != null) {
         data.subscribe(
           response => {
-            console.log(response);
+            //console.log(response);
             localStorage.removeItem('token');
             this.router.navigateByUrl('');
           },
           error => {
-            console.log(error.error);
+            //console.log(error.error);
             localStorage.removeItem('token');
             this.router.navigateByUrl('');
           }
@@ -48,10 +48,10 @@ export class LogoutComponent implements OnInit {
   }
 
   redirect() {
-    console.log('logout redirect');
+    //console.log('logout redirect');
 
     if (localStorage.getItem('token') == null) {
-      console.log('logout redirect 222');
+      //console.log('logout redirect 222');
       this.router.navigateByUrl('/');
       return 1;
     } else {

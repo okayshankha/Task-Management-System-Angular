@@ -43,6 +43,11 @@ export const serviceApiConfig = {
         method: "POST",
         url: "/task/assign",
         token: true,
+    },
+    me:{
+        method: "GET",
+        url: "/me",
+        token: true,
     }
 
 };

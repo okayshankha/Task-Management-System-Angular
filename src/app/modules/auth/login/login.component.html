@@ -35,7 +35,7 @@
                   </div> -->
 
 
-                  <div class="form-group text-center text-danger">
+                  <div class="alert alert-danger" role="alert" *ngIf="this.errorMessage">
                     {{ this.errorMessage }}
                   </div>
 
@@ -46,6 +46,7 @@
                   </div>
 
                 </form>
+
               </div>
               <div class="card-footer text-center">
                 <div class="small"><a [routerLink]="['/register']" routerLinkActive="router-link-active">Need an
