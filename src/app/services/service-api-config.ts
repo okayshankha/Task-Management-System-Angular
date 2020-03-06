@@ -44,7 +44,12 @@ export const serviceApiConfig = {
         url: "/task/assign",
         token: true,
     },
-    me:{
+    taskFilter: {
+        method: "POST",
+        url: "/task/filter",
+        token: true,
+    },
+    me: {
         method: "GET",
         url: "/me",
         token: true,

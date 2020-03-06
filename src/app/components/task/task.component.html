@@ -1,7 +1,11 @@
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand" [routerLink]="['']" routerLinkActive="router-link-active" >Task Management</a><button class="btn btn-link btn-sm order-1 order-lg-0"
-        id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button><!-- Navbar Search-->
+    <a class="navbar-brand" [routerLink]="['']" routerLinkActive="router-link-active">Task Management</a>
+    <!-- <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#">
+        <i class="fas fa-bars"></i>
+    </button> -->
+    <!-- Navbar Search  -->
     <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        <!---
         <div class="input-group">
             <input class="form-control" type="text" placeholder="Search for..." aria-label="Search"
                 aria-describedby="basic-addon2" />
@@ -9,6 +13,7 @@
                 <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
             </div>
         </div>
+    -->
     </form>
     <!-- Navbar-->
     <ul class="navbar-nav ml-auto ml-md-0">
@@ -16,8 +21,8 @@
             <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">Settings</a><a class="dropdown-item" href="#">Activity Log</a>
-                <div class="dropdown-divider"></div>
+                <!-- <a class="dropdown-item" href="#">Settings</a><a class="dropdown-item" href="#">Activity Log</a> -->
+                <!-- <div class="dropdown-divider"></div> -->
                 <a class="dropdown-item" [routerLink]="['/logout']" routerLinkActive="router-link-active">Logout</a>
             </div>
         </li>
@@ -93,7 +98,7 @@
                             <div class="form-group">
                                 <label class="small mb-1" for="inputTaskName">Task Name</label>
                                 <input formControlName="name" class="form-control form-control-sm py-4"
-                                    id="inputTaskName" type="email" placeholder="Enter email address" />
+                                    id="inputTaskName" type="email" placeholder="Enter task name" />
                                 <span class="text-danger"
                                     [hidden]="!(addNewTaskForm.get('name').touched && addNewTaskForm.get('name').errors?.required)">
                                     Field cannot be empty
@@ -132,11 +137,13 @@
 
                     <div class="form-group">
                         <label class="small mb-1" for="inputTaskProjectId">Project Id</label>
-                        <select formControlName="project_id" id="inputTaskProjectId" (change)="refineForm('project_id')"
+                        <!-- refineForm('project_id') -->
+                        <select formControlName="project_id" id="inputTaskProjectId"
+                            (click)="getProjectSpecificTasks(addNewTaskForm.get('project_id').value)"
                             class="form-control form-control-lg">
 
                             <option [ngValue]="project.project_id" *ngFor="let project of assignableProjectList">
-                                {{project.name}} : {{project.project_id}}</option>
+                                {{project.name}}</option>
                         </select>
                         <span class="text-danger"
                             [hidden]="!(addNewTaskForm.get('project_id').touched && addNewTaskForm.get('project_id').errors?.required)">
@@ -146,10 +153,10 @@
                     <div class="form-group">
                         <label class="small mb-1" for="inputParentTask">Assign Parent Task</label>
                         <select formControlName="parent_task_details_id" id="inputParentTask"
-                            (change)="refineForm('parent_task')" class="form-control form-control-lg">
-
+                            class="form-control form-control-lg">
+                            <option></option>
                             <option [ngValue]="task.task_details_id" *ngFor="let task of assignableParentTaskList">
-                                {{task.name}} : {{task.task_details_id}}</option>
+                                {{task.name}}</option>
                         </select>
                     </div>
 
@@ -241,33 +248,25 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <span [hidden]="allTaskList">No task Found</span>
+                            <table [hidden]="!allTaskList" id="taskTable" class="table table-bordered" id="dataTable"
+                                width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>id</th>
                                         <th>Task Name</th>
                                         <th>Parent Task Id</th>
-                                        <th>Project Id</th>
+                                        <th>Project Name</th>
                                         <th>Assigned Employee</th>
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>id</th>
-                                        <th>Task Name</th>
-                                        <th>Parent Task Id</th>
-                                        <th>Project Id</th>
-                                        <th>Assigned Employee</th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
                                 <tbody>
-                                    <tr *ngFor="let task of assignableParentTaskList">
+                                    <tr *ngFor="let task of allTaskList">
                                         <td>{{ task.task_details_id }}</td>
                                         <td>{{ task.name }}</td>
                                         <td>{{ task.parent_task_details_id }}</td>
-                                        <td>{{ task.project_id }}</td>
+                                        <td>{{ task.project_id.name }}</td>
                                         <td>
                                             <span
                                                 *ngIf="task.assigned_to_employee">{{ task.assigned_to_employee.fname }}
@@ -275,15 +274,10 @@
                                                 {{ task.assigned_to_employee.lname }}</span>
                                         </td>
                                         <td>
-                                            <button 
-                                                class="btn btn-primary" 
-                                                class="btn btn-primary" 
-                                                type="button"
-                                                data-toggle="modal" 
-                                                data-target="#assignTaskForm"
-                                                (click)="onClickTaskAssignButton(task.project_id, task.task_details_id)"
-                                                [hidden]="task.assigned_to_employee"
-                                                >Assign</button>
+                                            <button class="btn btn-primary" class="btn btn-primary" type="button"
+                                                data-toggle="modal" data-target="#assignTaskForm"
+                                                (click)="onClickTaskAssignButton(task.project_id.project_id, task.task_details_id)"
+                                                [hidden]="task.assigned_to_employee">Assign</button>
                                         </td>
                                     </tr>
                                 </tbody>

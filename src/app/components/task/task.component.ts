@@ -10,23 +10,28 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class TaskComponent implements OnInit {
 
-  loggedInAs:any = null;
+  loggedInAs: any = null;
   countries: any = null;
   errorMessage: any = null;
   addNewTaskForm: FormGroup;
   assignTaskForm: FormGroup;
   assignableManagerEmployeeList: any = null;
+
   assignableParentTaskList: any = null;
+
   assignableProjectList: any = null;
+
+  allTaskList: any = null;
   assignTaskForm_emoloyeeList: any = null;
+
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private api: ApiService
-  ) { 
+  ) {
     this.loggedInAs = {
-      fname : "",
+      fname: "",
       mname: "",
       lname: ""
     }
@@ -57,7 +62,7 @@ export class TaskComponent implements OnInit {
 
   }
 
-  fetchMeApi(){
+  fetchMeApi() {
     let data = null;
     data = this.api.request('me', {});
     if (data['function_response'] == 'success') {
@@ -93,9 +98,9 @@ export class TaskComponent implements OnInit {
     }
   }
 
-  refreshList(){
+  refreshList() {
     //console.log('yo refreshList');
-    this.getAssignableParentTaskList();
+    this.getAllParentTaskList();
     this.getAssignableProjectList();
     this.getAssignableManagerEmployeeList();
   }
@@ -141,19 +146,6 @@ export class TaskComponent implements OnInit {
         this.addNewTaskForm.get('project_id').updateValueAndValidity();
       }
     }
-
-    //console.log('assigned_to_login_access_id  ' + this.addNewTaskForm.get('assigned_to_login_access_id').value);
-
-    /*
-    if (this.addNewTaskForm.get('assigned_to_login_access_id').value != '') {
-      this.addNewTaskForm.get('assignment_comment').setValidators(Validators.required);
-      this.addNewTaskForm.get('assignment_comment').updateValueAndValidity();
-    } else {
-      this.addNewTaskForm.get('assignment_comment').clearValidators();
-      this.addNewTaskForm.get('assignment_comment').updateValueAndValidity();
-    }
-
-    */
   }
 
   addNewTaskSubmitCancel() {
@@ -239,7 +231,7 @@ export class TaskComponent implements OnInit {
         }
       }
     }
-    
+
     this.refreshList();
   }
 
@@ -291,6 +283,46 @@ export class TaskComponent implements OnInit {
     }
   }
 
+  getProjectSpecificTasks(project_id = null) {
+    this.assignTaskForm.get('project_id').setValue(project_id);
+    this.assignTaskForm.get('project_id').updateValueAndValidity();
+
+    console.log('getting getProjectSpecificTasks');
+
+    let data = null;
+    data = this.api.request('taskFilter', { filterByField: 'project_id', filterValue: project_id });
+
+
+    if (data['function_response'] == 'success') {
+
+      data = data['server_response'];
+      if (data != null) {
+        data.subscribe(
+          response => {
+            console.log(response);
+            if (response.status == 'success') {
+              //console.log(response);
+              this.assignableParentTaskList = response.tasks;
+
+              //this.assignTaskForm_emoloyeeList = this.assignableProjectList;
+            } else {
+              //console.log(response);
+              if (response.status == 'failed') {
+                this.errorMessage = response.info;
+              }
+            }
+          },
+          error => {
+            //console.log(error.error);
+            if (error.error.status == 'failed') {
+              this.errorMessage = error.error.info;
+            }
+          }
+        );
+      }
+    }
+  }
+
   getAssignableProjectList() {
     let data = null;
     data = this.api.request('allProjects', {});
@@ -323,7 +355,7 @@ export class TaskComponent implements OnInit {
     }
   }
 
-  getAssignableParentTaskList() {
+  getAllParentTaskList() {
 
     let data = null;
     data = this.api.request('allTask', {});
@@ -335,9 +367,10 @@ export class TaskComponent implements OnInit {
             //console.log(response);
             if (response.status == 'success') {
               //console.log('getAssignableParentTaskList');
-
-              this.assignableParentTaskList = response.tasks;
-
+              this.allTaskList = response.tasks;
+              if (this.allTaskList && this.allTaskList.length == 0) {
+                this.allTaskList = null;
+              }
             } else {
               //console.log(response);
               if (response.status == 'failed') {
