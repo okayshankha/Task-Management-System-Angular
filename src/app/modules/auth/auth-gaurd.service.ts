@@ -13,7 +13,7 @@ export class AuthGaurd implements CanLoad {
   canLoad(route: Route) {
     console.log('LoginRedirect Token Found' + (localStorage.getItem('token') == null));
     if (localStorage.getItem('token') == null) {
-      //this.router.navigate(['/login']);
+      this.router.navigate(['']);
       console.log('Didn\'t got the token');
       return false;
     }

@@ -10,8 +10,38 @@ export const serviceApiConfig = {
         token: false,
     },
     logout: {
-        method: "get",
-        url: "/register",
+        method: "GET",
+        url: "/logout",
+        token: true,
+    },
+    allEmployee: {
+        method: "GET",
+        url: "/employees",
+        token: true,
+    },
+    allEmployeeWithFilter: {
+        method: "POST",
+        url: "/employees/filter",
+        token: true,
+    },
+    allTask: {
+        method: "GET",
+        url: "/task/all",
+        token: true,
+    },
+    allProjects: {
+        method: "GET",
+        url: "/projects",
+        token: true,
+    },
+    createTask: {
+        method: "POST",
+        url: "/task/create",
+        token: true,
+    },
+    taskAssign: {
+        method: "POST",
+        url: "/task/assign",
         token: true,
     }
 
